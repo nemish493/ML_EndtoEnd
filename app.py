@@ -50,6 +50,7 @@ def predict_api():
     # Make prediction using the preprocessed data
     output = knnmodel.predict(preprocessed_data)
     print(output[0])
+    print(preprocessed_data)
     
     return jsonify(output[0])
 
@@ -64,8 +65,9 @@ def predict():
     # Make prediction using the preprocessed data
     output = knnmodel.predict(preprocessed_data)
     print(output[0])
+    print(data)
     
-    return render_template('home.html', prediction=output[0])
+    return render_template('home.html', prediction_text=f'this is the predicted crop  { output[0] }')
 
 if __name__ == '__main__':
     app.run(debug=True)
