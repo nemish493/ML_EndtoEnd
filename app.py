@@ -53,20 +53,19 @@ def predict_api():
     
     return jsonify(output[0])
 
-# @app.route('/predict', methods=['POST'])
-# def predict():
-#     data = [float(x) for x in request.form.values()]
+@app.route('/predict', methods=['POST'])
+def predict():
+    # Convert form data to a dictionary
+    data = {col: float(value) for col, value in zip(NPK_cols + temp_ph_cols + rainfall_humidity_cols, request.form.values())}
     
-#     # Convert the form data into the proper input format
-#     input_data = dict(zip(NPK_cols + temp_ph_cols + rainfall_humidity_cols, data))
+    # Preprocess the input data
+    preprocessed_data = preprocess_input(data)
     
-#     # Preprocess the input data
-#     preprocessed_data = preprocess_input(input_data)
+    # Make prediction using the preprocessed data
+    output = knnmodel.predict(preprocessed_data)
+    print(output[0])
     
-#     # Make prediction using the preprocessed data
-#     output = knnmodel.predict(preprocessed_data)
-    
-#     return render_template('home.html', prediction_text=f'Predicted Crop: {output[0]}')
+    return render_template('home.html', prediction=output[0])
 
 if __name__ == '__main__':
     app.run(debug=True)
