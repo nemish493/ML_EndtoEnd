@@ -1,0 +1,37 @@
+name: CI Pipeline
+
+# Trigger the workflow on push or pull request events
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# Define the job to be run
+jobs:
+  test:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu as the runner environment
+
+    # Steps to execute the job
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run unit tests
+        run: |
+          source venv/bin/activate
+          python -m unittest discover -s tests  # This assumes your tests are in a "tests" folder
